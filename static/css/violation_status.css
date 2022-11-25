@@ -1,0 +1,89 @@
+* {
+  font-family: "Public Sans", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #f8f8f8;
+}
+
+.challan-container {
+  height: 90%;
+  display: flex;
+  justify-content: center;
+}
+
+.challan-body {
+  width: 80%;
+  border-radius: 15px;
+  /* box-shadow: 0 0 1rem rgb(0 0 0 / 60%); */
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.challan-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  color: #fff;
+  background: #212529;
+}
+
+.challan-form {
+  height: 70px;
+}
+
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+hr {
+  margin: 0.7rem;
+  opacity: 0.2;
+}
+
+.violations {
+  height: 400px;
+  padding: 0 20px;
+  overflow: auto;
+}
+
+.num-plate-img {
+  height: 90px;
+  width: 150px;
+}
+
+.payment-div {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-div > a {
+  font-size: 1.1rem;
+  margin: 10px;
+  text-decoration: none;
+}
+
+.payment-div > a:hover {
+  opacity: 0.8;
+}
+
+tr {
+  text-align: center;
+}
+
+.warning {
+  border-color: #ff9800;
+  color: orange;
+}
+
+.warning:hover {
+  background: #ff9800;
+  color: white;
+}

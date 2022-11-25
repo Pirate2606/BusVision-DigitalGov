@@ -1,0 +1,125 @@
+* {
+  font-family: "Public Sans", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #f8f8f8;
+}
+
+.uploads-main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.navbar {
+  height: 100%;
+  flex: 0.1;
+}
+
+.nav-container {
+  height: 100%;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-list {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-item {
+  height: 50px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-item:hover {
+  color: white;
+  opacity: 0.8;
+}
+
+.selected {
+  border-radius: 5px;
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.container {
+  overflow: auto;
+  flex: 0.9;
+}
+
+.row {
+  height: 96.7%;
+}
+
+.uploads-body {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-btns {
+  display: flex;
+}
+
+.uploads-illustration {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form {
+  height: 50%;
+  width: 90%;
+}
+
+.violation-status {
+  height: 90%;
+  overflow: auto
+}
+
+.num-plate-img {
+  height: 90px;
+  width: 120px;
+}
+
+/* .reset {
+  margin-left: 10px;
+} */
+
+#loading {
+  display: none !important;
+}
+
+#content {
+  height: 100%;
+}
+
+.loading-container {
+    margin: auto;
+}
+
+tr {
+  text-align: center;
+}

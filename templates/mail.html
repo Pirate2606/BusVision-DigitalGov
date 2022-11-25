@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusVision</title>
+</head>
+
+<body>
+    <h3>Violation Alert!!</h3>
+    <p>
+        Your vehicle has being caught in the bus lane. An image has been attached as proof.
+        <br>
+        <b>Vehicle Number: </b>{{ vehicle_number }}
+        <br>
+        <b>Location: </b>{{ location }}
+        <br>
+        <b>Timestamp: </b>{{ timestamp }}
+        <br>
+    <h4>Image Taken:</h4>
+    <img alt="Image" src="{{ image }}" />
+    </p>
+</body>
+
+</html>
