@@ -57,15 +57,8 @@ def count_vehicle(box_id, img, center_lane, video_name, lane_violators, real_vid
     if abs(x - int(center_lane)) < 30:
         # if id_ not in lane_violators:
         lane_violators[id_] = [id_, center, center_lane, classNames[class_id]]
-        # crop_img = img[y:y+h, x:x+w]
-        # cv2.imwrite(os.path.join(final_path, f"{id_}.jpg"), crop_img)
-        if real_video != "video1_3_1.mp4":
-            cv2.imwrite(os.path.join(final_path, f"{id_}.jpg"), img)
+        cv2.imwrite(os.path.join(final_path, f"{id_}.jpg"), img)
 
-    # Draw circle in the middle of the rectangle
-    # cv2.circle(img, center, 2, (0, 0, 255), -1)
-    # cv2.putText(img, f'{id_}', center,
-    #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
     return lane_violators
 
 

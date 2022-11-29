@@ -65,15 +65,7 @@ def main(filename, video_name, station_name, user_name, location, real_video):
 
                     img_roi = number_plate[y:y + h, x:x + w]
                     current_frame += 1
-                    if real_video == "video1_3_1.mp4":
-                        if current_frame == 196 or current_frame == 250:
-                            # cv2.imwrite(os.path.join(
-                            #     final_path, f"number_plate_{count}_{video_name.split('.')[0]}.jpg"), img_roi)
-                            count += 1
-                    else:
-                        cv2.imwrite(os.path.join(
-                            final_path, f"number_plate_{count}_{video_name.split('.')[0]}.jpg"), img_roi)
-                    # cv2.imshow("ROI", img_roi)
+                    cv2.imwrite(os.path.join(final_path, f"number_plate_{count}_{video_name.split('.')[0]}.jpg"), img_roi)
 
             # Store the original frame
             original_frame = frame.copy()
@@ -129,111 +121,54 @@ def main(filename, video_name, station_name, user_name, location, real_video):
     number_plate_text = []
     b64_string = []
     
-    if real_video == "video1_3_1.mp4":
-        video_name = "2d4b8b2a.mp4"
-        number_plate_text = ["WB42AC2530", "X477ELF"]
-        final_path = os.path.join(IMAGES_PATH, video_name.split(".")[0])
-        for i in range(2):
-            img_location = os.path.join(
-                final_path, f"number_plate_{i + 1}_{video_name.split('.')[0]}.jpg")
-            with open(img_location, "rb") as img_file:
-                b64_string.append(base64.b64encode(img_file.read()))
-        
-        with app.app_context():
-            j = 0
-            image_name = ["15", "19"]
-            for k in range(2):
-                vehicle_location = os.path.join(final_path, image_name[j] + ".jpg")
-                with open(vehicle_location, "rb") as img_file:
-                    vehicle_b64_string = base64.b64encode(img_file.read())
-                vio = Violators(
-                    video_file_name=video_name.split(".")[0],
-                    station_name=station_name,
-                    user_name=user_name,
-                    image_file_name=image_name[j] + ".jpg",
-                    location=location,
-                    timestamp=datetime.datetime.now(),
-                    category="Car",
-                    is_approved=True,
-                    number_plate=number_plate_text[j],
-                    number_plate_img=b64_string[j].decode('utf-8'),
-                    img=vehicle_b64_string.decode('utf-8'),
-                    payment_status=False
-                )
-                db.session.add(vio)
-                db.session.commit()
-                user = AllUsers.query.filter_by(
-                    vehicle_number=number_plate_text[j]).first()
-                if user is not None:
-                    url = "https://api.imgbb.com/1/upload"
-                    payload = {
-                        "key": '00a33d9bbaa2f24bf801c871894e91d4',
-                        "image": vehicle_b64_string,
-                    }
-                    res = requests.post(url, payload)
-                    str_name = ""
-                    for r in res:
-                        str_name += r.decode("utf8")
-                    image_url = json.loads(str_name)['data']['url']
-                    send_mail(
-                        user.email,
-                        image_url,
-                        number_plate_text[j],
-                        location,
-                        datetime.datetime.now()
-                    )
-                j += 1                        
-    else:
-        for i in range(len(lane_violators)):
-            img_location = os.path.join(
-                final_path, f"number_plate_{i + 1}_{video_name.split('.')[0]}.jpg")
-            if real_video == "video8.mp4":
-                number_plate_text = ["X477ELF"]
-            else:
-                number_plate_text = ["WB42AC2530"]
-            with open(img_location, "rb") as img_file:
-                b64_string.append(base64.b64encode(img_file.read()))
 
-        with app.app_context():
-            j = 0
-            for v in lane_violators:
-                vehicle_location = os.path.join(final_path, str(v) + ".jpg")
-                with open(vehicle_location, "rb") as img_file:
-                    vehicle_b64_string = base64.b64encode(img_file.read())
-                vio = Violators(
-                    video_file_name=video_name.split(".")[0],
-                    station_name=station_name,
-                    user_name=user_name,
-                    image_file_name=str(v) + ".jpg",
-                    location=location,
-                    timestamp=datetime.datetime.now(),
-                    category="Car",
-                    is_approved=True,
-                    number_plate=number_plate_text[j],
-                    number_plate_img=b64_string[j].decode('utf-8'),
-                    img=vehicle_b64_string.decode('utf-8'),
-                    payment_status=False
+    for i in range(len(lane_violators)):
+        img_location = os.path.join(
+            final_path, f"number_plate_{i + 1}_{video_name.split('.')[0]}.jpg")
+        number_plate_text = perform_ocr(img_location)
+        with open(img_location, "rb") as img_file:
+            b64_string.append(base64.b64encode(img_file.read()))
+
+    with app.app_context():
+        j = 0
+        for v in lane_violators:
+            vehicle_location = os.path.join(final_path, str(v) + ".jpg")
+            with open(vehicle_location, "rb") as img_file:
+                vehicle_b64_string = base64.b64encode(img_file.read())
+            vio = Violators(
+                video_file_name=video_name.split(".")[0],
+                station_name=station_name,
+                user_name=user_name,
+                image_file_name=str(v) + ".jpg",
+                location=location,
+                timestamp=datetime.datetime.now(),
+                category="Car",
+                is_approved=True,
+                number_plate=number_plate_text[j],
+                number_plate_img=b64_string[j].decode('utf-8'),
+                img=vehicle_b64_string.decode('utf-8'),
+                payment_status=False
+            )
+            db.session.add(vio)
+            db.session.commit()
+            user = AllUsers.query.filter_by(
+                vehicle_number=number_plate_text[j]).first()
+            if user is not None:
+                url = "https://api.imgbb.com/1/upload"
+                payload = {
+                    "key": '00a33d9bbaa2f24bf801c871894e91d4',
+                    "image": vehicle_b64_string,
+                }
+                res = requests.post(url, payload)
+                str_name = ""
+                for r in res:
+                    str_name += r.decode("utf8")
+                image_url = json.loads(str_name)['data']['url']
+                send_mail(
+                    user.email,
+                    image_url,
+                    number_plate_text[j],
+                    location,
+                    datetime.datetime.now()
                 )
-                db.session.add(vio)
-                db.session.commit()
-                user = AllUsers.query.filter_by(
-                    vehicle_number=number_plate_text[j]).first()
-                if user is not None:
-                    url = "https://api.imgbb.com/1/upload"
-                    payload = {
-                        "key": '00a33d9bbaa2f24bf801c871894e91d4',
-                        "image": vehicle_b64_string,
-                    }
-                    res = requests.post(url, payload)
-                    str_name = ""
-                    for r in res:
-                        str_name += r.decode("utf8")
-                    image_url = json.loads(str_name)['data']['url']
-                    send_mail(
-                        user.email,
-                        image_url,
-                        number_plate_text[j],
-                        location,
-                        datetime.datetime.now()
-                    )
-                j += 1
+            j += 1

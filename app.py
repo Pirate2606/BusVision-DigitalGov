@@ -355,12 +355,7 @@ def add_video():
             
             # Getting current user details
             user = Users.query.filter_by(id=session['user_id']).first()
-            if file.filename == "video1_3_1.mp4":
-                video = Videos(
-                    video_file_name="2d4b8b2a", user_name=user.user_name, timestamp=datetime.datetime.now())
-            else:
-                video = Videos(
-                    video_file_name=video_name.split(".")[0], user_name=user.user_name, timestamp=datetime.datetime.now())
+            video = Videos(video_file_name=video_name.split(".")[0], user_name=user.user_name, timestamp=datetime.datetime.now())
             db.session.add(video)
             db.session.commit()
 

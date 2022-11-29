@@ -21,16 +21,6 @@ def perform_ocr(img_location):
     )
     result = result.content.decode()
     result = json.loads(result)
-    try:
-        parsed_results = result.get("ParsedResults")[0]
-        text_detected = parsed_results.get("ParsedText")
-    except:
-        text_detected = ""
-
-    if text_detected.strip() == "":
-        text_detected = "WB42AC2530"
-
-    if text_detected.strip() in "X477ELF":
-        text_detected = "X477ELF"
-
-    return text_detected
+    parsed_results = result.get("ParsedResults")[0]
+    
+    return parsed_results.get("ParsedText")
